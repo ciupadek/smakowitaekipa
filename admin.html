@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>CMS</title></head>
+<body>
+<h2>Dodaj</h2>
+<input id="title" placeholder="Tytuł">
+<input id="slug" placeholder="Slug">
+<input id="category" placeholder="Kategoria">
+<input id="image" placeholder="Obraz">
+<textarea id="content"></textarea>
+<input id="seo" placeholder="SEO">
+<button onclick="add()">Zapisz</button>
+<script>
+function add(){
+fetch('/api/add',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+title:title.value,slug:slug.value,category:category.value,
+image:image.value,content:content.value,seo:seo.value
+})
+}).then(()=>alert('OK'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* =========================
+   CONTAINER (centrowanie)
+========================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* =========================
+   HERO LOGO (większe)
+========================= */
+.hero-logo {
+  display: block;
+  margin: 0 auto 15px;
+  width: 260px;
+  max-width: 90%;
+  height: auto;
+}
+
+/* =========================
+   GRID PRZEPISÓW
+========================= */
+.recipes-grid {
+  display: grid;
+  gap: 20px;
+}
+
+/* DESKTOP – 4 kolumny */
+@media (min-width: 1024px) {
+  .recipes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* TABLET */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .recipes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* SMARTFON – 3 kolumny */
+@media (max-width: 599px) {
+  .recipes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+/* =========================
+   KARTA PRZEPISU
+========================= */
+.recipe-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+}
+
+/* obrazki */
+.recipe-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* mniejsze obrazki na mobile */
+@media (max-width: 599px) {
+  .recipe-card img {
+    height: 120px;
+  }
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Przepis</title>
+<meta id="seo">
+<script type="application/ld+json" id="schema"></script>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const slug=location.pathname.split('/').pop();
+
+fetch('/api/recipes').then(r=>r.json()).then(data=>{
+const r=data.find(x=>x.slug===slug);
+
+document.title=r.title;
+document.getElementById('seo').setAttribute('content',r.seo||'');
+
+document.getElementById('schema').textContent=JSON.stringify({
+"@context":"https://schema.org",
+"@type":"Recipe",
+"name":r.title,
+"description":r.seo||"",
+"image":r.image
+});
+
+app.innerHTML=`
+<h1>${r.title}</h1>
+<img loading="lazy" src="${r.image}" width="400">
+<p>${r.content}</p>
+<div class="ad">REKLAMA</div>
+`;
+});
+</script>
+
+</body>
+</html>

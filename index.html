@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Smakowita Ekipa</title>
+<meta name="description" content="Sprawdzone przepisy z domowej kuchni">
+
+<style>
+.hero-logo img {
+  width: 260px;
+}
+.hero-logo {
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 15px;
+  display: block;
+}
+.section h2 {
+  margin-bottom: 20px;
+}
+.recipe-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+}
+.recipe-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.recipes-grid {
+  display: grid;
+  gap: 20px;
+}
+
+/* DESKTOP */
+@media (min-width: 1024px) {
+  .recipes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* TABLET */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .recipes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* SMARTFON */
+@media (max-width: 599px) {
+  .recipes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .recipe-card img {
+    height: 120px;
+  }
+  .recipe-card {
+    border-radius: 12px;
+  }
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+body {margin:0;font-family: Arial;background:#f4efe6;}
+.hero {
+  position: relative;
+  background:url('/kitchen.webp') center/cover no-repeat;
+  padding:60px 20px;
+  text-align:center;
+  color:#fff;
+}
+
+.hero::after {
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+}
+
+.hero * {
+  position:relative;
+  z-index:2;
+}
+.hero img {max-width:320px;}
+.hero h2 {margin:10px 0;font-weight:normal;}
+.search {margin-top:20px;}
+.search input {padding:12px;width:250px;border:none;border-radius:8px 0 0 8px;}
+.search button {padding:12px 20px;border:none;background:#4CAF50;color:#fff;border-radius:0 8px 8px 0;cursor:pointer;}
+nav {background:#fff;padding:10px;display:flex;justify-content:center;gap:20px;}
+nav a {text-decoration:none;color:#333;font-weight:bold;}
+.section {
+  padding:20px;
+  margin-bottom: 40px;
+}
+.grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
+.card {
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transition:0.3s;
+}
+.card:hover {
+  transform:translateY(-8px) scale(1.02);
+}
+.card img {
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+.card-content {padding:10px;}
+.card a {text-decoration:none;color:#000;}
+.ad {margin:20px;padding:20px;text-align:center;background:#ddd;}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+  <img src="/logo.png" class="hero-logo">
+  <h2>Sprawdzone przepisy z domowej kuchni</h2>
+  <div class="search">
+    <input placeholder="Szukaj przepisów...">
+    <button>Szukaj</button>
+  </div>
+</div>
+
+<nav>
+  <a href="/">Strona główna</a>
+  <a href="#">Kategorie</a>
+  <a href="#">Popularne</a>
+  <a href="#">Nowe</a>
+</nav>
+
+
+<div class="container">
+  <div class="ad">MIEJSCE NA REKLAMĘ</div>
+
+  <section class="container">
+    <h2>Najnowsze przepisy</h2>
+    <div id="list" class="recipes-grid"></div>
+  </section>
+
+  <section class="container">
+    <h2>Popularne przepisy</h2>
+    <div id="popular" class="recipes-grid"></div>
+  </section>
+
+  <section class="container">
+    <h2>Losowe przepisy</h2>
+    <div id="random" class="recipes-grid"></div>
+  </section>
+</div>
+
+<script>
+fetch('/api/recipes')
+.then(r=>r.json())
+.then(data=>{
+
+  // NAJNOWSZE
+  list.innerHTML = data.slice().reverse().map(r => `
+  <div class="card">
+    <a href="/przepis/${r.slug}">
+      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <div class="card-content">
+        <h3>${r.title}</h3>
+        <p>${r.category}</p>
+      </div>
+    </a>
+  </div>
+  `).join('');
+
+  // POPULARNE (na razie losowe TOP)
+  popular.innerHTML = data.slice(0,4).map(r => `
+  <div class="card">
+    <a href="/przepis/${r.slug}">
+      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <div class="card-content">
+        <h3>${r.title}</h3>
+        <p>${r.category}</p>
+      </div>
+    </a>
+  </div>
+  `).join('');
+
+  // LOSOWE
+  random.innerHTML = data.sort(()=>0.5 - Math.random()).slice(0,4).map(r => `
+  <div class="card">
+    <a href="/przepis/${r.slug}">
+      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <div class="card-content">
+        <h3>${r.title}</h3>
+        <p>${r.category}</p>
+      </div>
+    </a>
+  </div>
+  `).join('');
+
+});
+</script>
+
+</body>
+</html>

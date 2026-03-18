@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Smakowita Ekipa</title>
 <meta name="description" content="Sprawdzone przepisy z domowej kuchni">
+<link rel="stylesheet" href="styles.css">
 
 <style>
 .hero-logo img {
@@ -75,7 +76,7 @@
 body {margin:0;font-family: Arial;background:#f4efe6;}
 .hero {
   position: relative;
-  background:url('/kitchen.webp') center/cover no-repeat;
+  background:url("kitchen.webp") center/cover no-repeat;
   padding:60px 20px;
   text-align:center;
   color:#fff;
@@ -131,7 +132,7 @@ nav a {text-decoration:none;color:#333;font-weight:bold;}
 <body>
 
 <div class="hero">
-  <img src="/logo.png" class="hero-logo">
+  <img src="logo.png" class="hero-logo">
   <h2>Sprawdzone przepisy z domowej kuchni</h2>
   <div class="search">
     <input placeholder="Szukaj przepisów...">
@@ -175,7 +176,7 @@ fetch('/api/recipes')
   list.innerHTML = data.slice().reverse().map(r => `
   <div class="card">
     <a href="/przepis/${r.slug}">
-      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <img loading="lazy" src="${r.image}" onerror="this.src='kitchen.webp'">
       <div class="card-content">
         <h3>${r.title}</h3>
         <p>${r.category}</p>
@@ -188,7 +189,7 @@ fetch('/api/recipes')
   popular.innerHTML = data.slice(0,4).map(r => `
   <div class="card">
     <a href="/przepis/${r.slug}">
-      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <img loading="lazy" src="${r.image}" onerror="this.src='kitchen.webp'">
       <div class="card-content">
         <h3>${r.title}</h3>
         <p>${r.category}</p>
@@ -201,7 +202,7 @@ fetch('/api/recipes')
   random.innerHTML = data.sort(()=>0.5 - Math.random()).slice(0,4).map(r => `
   <div class="card">
     <a href="/przepis/${r.slug}">
-      <img loading="lazy" src="${r.image}" onerror="this.src='/kitchen.webp'">
+      <img loading="lazy" src="${r.image}" onerror="this.src='kitchen.webp'">
       <div class="card-content">
         <h3>${r.title}</h3>
         <p>${r.category}</p>

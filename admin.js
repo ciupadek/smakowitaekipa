@@ -90,6 +90,50 @@ document.getElementById('recipeForm').addEventListener('submit', function (e) {
 });
 
 // ==========================
+// IMPORT HTML → FORMULARZ
+// ==========================
+document.getElementById('parseHTMLBtn').addEventListener('click', () => {
+  const html = document.getElementById('importHTML').value;
+
+  if (!html.trim()) {
+    alert('Wklej HTML');
+    return;
+  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Tytuł
+  const title = doc.querySelector('h3')?.innerText || '';
+  document.getElementById('title').value = title;
+
+  // Opis (pierwszy paragraf)
+  const description = doc.querySelector('p')?.innerText || '';
+  document.getElementById('description').value = description;
+
+  // SEO – fraza kluczowa
+  const seoItems = doc.querySelectorAll('h4 + ul li');
+  seoItems.forEach(li => {
+    if (li.innerText.includes('Fraza kluczowa')) {
+      document.getElementById('seo').value = li.innerText.replace('Fraza kluczowa:', '').trim();
+    }
+  });
+
+  // Kategorie
+  const categoriesMatch = html.match(/<h4>Kategorie<\/h4>\s*<p>(.*?)<\/p>/);
+
+  if (categoriesMatch) {
+    const firstCat = categoriesMatch[1].split(',')[0].trim();
+    document.getElementById('category').value = firstCat;
+  }
+
+  // Trigger slug
+  document.getElementById('title').dispatchEvent(new Event('input'));
+
+  alert('✅ Wczytano dane z HTML');
+});
+
+// ==========================
 // KATEGORIE
 // ==========================
 

@@ -175,7 +175,7 @@ fetch('/api/recipes')
   // NAJNOWSZE
   list.innerHTML = data.slice().reverse().map(r => `
   <div class="card">
-    <a href="/przepis/${r.slug}">
+    <a href="recipe.html?slug=${r.slug}">
       <img loading="lazy" src="${r.image}" onerror="this.src='kitchen.webp'">
       <div class="card-content">
         <h3>${r.title}</h3>

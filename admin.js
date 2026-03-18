@@ -38,7 +38,6 @@ document.getElementById('recipeForm').addEventListener('submit', function (e) {
   const slug = document.getElementById('slug');
   const category = document.getElementById('category');
   const image = document.getElementById('image');
-  const description = document.getElementById('description');
   const seo = document.getElementById('seo');
 
   const titleError = document.getElementById('titleError');
@@ -63,7 +62,7 @@ document.getElementById('recipeForm').addEventListener('submit', function (e) {
     slug: slug.value.trim(),
     category: category.value,
     image: image.value.trim(),
-    description: description.value.trim(),
+    content: document.getElementById('importHTML').value.trim(),
     seo: seo.value.trim(),
     createdAt: new Date().toISOString()
   };
@@ -90,7 +89,7 @@ document.getElementById('recipeForm').addEventListener('submit', function (e) {
 });
 
 // ==========================
-// IMPORT HTML → FORMULARZ
+// IMPORT HTML → FORMULARZ (FULL)
 // ==========================
 document.getElementById('parseHTMLBtn').addEventListener('click', () => {
   const html = document.getElementById('importHTML').value;
@@ -103,23 +102,37 @@ document.getElementById('parseHTMLBtn').addEventListener('click', () => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
-  // Tytuł
+  // ==========================
+  // TYTUŁ
+  // ==========================
   const title = doc.querySelector('h3')?.innerText || '';
   document.getElementById('title').value = title;
 
-  // Opis (pierwszy paragraf)
-  const description = doc.querySelector('p')?.innerText || '';
-  document.getElementById('description').value = description;
+  // ==========================
+  // OPIS (WSZYSTKIE P przed pierwszym h4)
+  // ==========================
 
-  // SEO – fraza kluczowa
-  const seoItems = doc.querySelectorAll('h4 + ul li');
-  seoItems.forEach(li => {
-    if (li.innerText.includes('Fraza kluczowa')) {
-      document.getElementById('seo').value = li.innerText.replace('Fraza kluczowa:', '').trim();
-    }
-  });
+  // ==========================
+  // SEO (fraza kluczowa)
+  // ==========================
+  const seoMatch = html.match(/Fraza kluczowa:<\/strong>\s*(.*?)<\/li>/);
+  if (seoMatch) {
+    document.getElementById('seo').value = seoMatch[1].trim();
+  }
 
-  // Kategorie
+  // ==========================
+  // SLUG (z HTML)
+  // ==========================
+  const slugMatch = html.match(/Slug:<\/strong>\s*(.*?)<\/li>/);
+  if (slugMatch) {
+    document.getElementById('slug').value = slugMatch[1].trim();
+  } else {
+    document.getElementById('title').dispatchEvent(new Event('input'));
+  }
+
+  // ==========================
+  // KATEGORIA
+  // ==========================
   const categoriesMatch = html.match(/<h4>Kategorie<\/h4>\s*<p>(.*?)<\/p>/);
 
   if (categoriesMatch) {
@@ -127,10 +140,16 @@ document.getElementById('parseHTMLBtn').addEventListener('click', () => {
     document.getElementById('category').value = firstCat;
   }
 
-  // Trigger slug
-  document.getElementById('title').dispatchEvent(new Event('input'));
+  // ==========================
+  // TAGI (opcjonalnie)
+  // ==========================
+  const tagsMatch = html.match(/<h4>Tagi<\/h4>\s*<p>(.*?)<\/p>/);
 
-  alert('✅ Wczytano dane z HTML');
+  if (tagsMatch) {
+    console.log('Tagi:', tagsMatch[1]);
+  }
+
+  alert('✅ Wczytano pełne dane z HTML');
 });
 
 // ==========================

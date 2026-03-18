@@ -1,26 +1,73 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><title>CMS</title></head>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel admina – dodaj przepis</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
 <body>
-<h2>Dodaj</h2>
-<input id="title" placeholder="Tytuł">
-<input id="slug" placeholder="Slug">
-<input id="category" placeholder="Kategoria">
-<input id="image" placeholder="Obraz">
-<textarea id="content"></textarea>
-<input id="seo" placeholder="SEO">
-<button onclick="add()">Zapisz</button>
-<script>
-function add(){
-fetch('/api/add',{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({
-title:title.value,slug:slug.value,category:category.value,
-image:image.value,content:content.value,seo:seo.value
-})
-}).then(()=>alert('OK'));
-}
-</script>
+  <div class="admin-container">
+    <h1>Panel admina – dodaj przepis</h1>
+    <div class="admin-card">
+      <h2>Kategorie</h2>
+      <div class="form-group">
+        <input type="text" id="newCategory" placeholder="Nowa kategoria">
+        <button type="button" id="addCategoryBtn">Dodaj kategorię</button>
+      </div>
+      <div id="categoriesList"></div>
+    </div>
+    <form class="admin-form" id="recipeForm" autocomplete="off">
+      <!-- Podstawowe dane -->
+      <div class="admin-card">
+        <h2>Podstawowe dane</h2>
+        <div class="form-group">
+          <label for="title">Tytuł *</label>
+          <input type="text" id="title" name="title" required>
+          <div class="error-message" id="titleError"></div>
+        </div>
+        <div class="form-group">
+          <label for="slug">Slug</label>
+          <input type="text" id="slug" name="slug" readonly>
+        </div>
+        <div class="form-group">
+          <label for="category">Kategoria</label>
+          <select id="category" name="category">
+            <option value="">Wybierz kategorię</option>
+            <option>Obiad</option>
+            <option>Ciasta</option>
+            <option>Sałatki</option>
+            <option>Śniadania</option>
+          </select>
+        </div>
+      </div>
+      <!-- Media -->
+      <div class="admin-card">
+        <h2>Media</h2>
+        <div class="form-group">
+          <label for="image">Obrazek (URL)</label>
+          <input type="text" id="image" name="image">
+          <div class="image-preview" id="imagePreview"></div>
+        </div>
+      </div>
+      <!-- Treść -->
+      <div class="admin-card">
+        <h2>Treść</h2>
+        <div class="form-group">
+          <label for="description">Opis</label>
+          <textarea id="description" name="description" rows="5"></textarea>
+        </div>
+      </div>
+      <!-- SEO -->
+      <div class="admin-card">
+        <h2>SEO</h2>
+        <div class="form-group">
+          <label for="seo">SEO</label>
+          <input type="text" id="seo" name="seo">
+        </div>
+      </div>
+      <button type="submit" class="save-btn">Zapisz</button>
+    </form>
+  </div>
+  <script src="admin.js"></script>
 </body>
 </html>
